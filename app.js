@@ -12,6 +12,13 @@ var coolRouter = require('./routes/cool');
 // start express
 var app = express();
 
+// connect to mongoose
+var mongoose = require('mongoose');
+var mongoDB = '***REMOVED***';
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true});
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:')); // allows errors to print to console
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
