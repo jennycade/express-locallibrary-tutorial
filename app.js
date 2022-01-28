@@ -14,7 +14,10 @@ var app = express();
 
 // connect to mongoose
 var mongoose = require('mongoose');
-var mongoDB = '***REMOVED***';
+
+// get the connection string
+require('dotenv').config();
+var mongoDB = process.env.MONGO_URI;
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:')); // allows errors to print to console
