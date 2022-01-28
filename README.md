@@ -1,1 +1,1 @@
-Mini-message board project for The Odin Project
+Local library tutorial from MDN
