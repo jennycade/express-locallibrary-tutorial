@@ -14,7 +14,6 @@ var app = express();
 
 // connect to mongoose
 var mongoose = require('mongoose');
-
 // get the connection string
 require('dotenv').config();
 var mongoDB = process.env.MONGO_URI;
