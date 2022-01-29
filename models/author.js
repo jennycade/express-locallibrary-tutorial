@@ -22,8 +22,8 @@ var AuthorSchema = new Schema(
 // Virtual field: author's full name
 AuthorSchema
 .virtual('name')
-.get(() => {
-  var fullName = '';
+.get(function() {
+  let fullName = '';
   if (this.first_name && this.family_name) {
     fullName = `${this.family_name}, ${this.first_name}`;
   }
@@ -36,7 +36,7 @@ AuthorSchema
 // Virtual for lifespan
 AuthorSchema
 .virtual('lifespan')
-.get(() => {
+.get(function() {
   // rewriting what's in the tutorial
   let birthYear = '??';
   if (this.date_of_birth) {
