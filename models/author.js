@@ -40,11 +40,11 @@ AuthorSchema
   // rewriting what's in the tutorial
   let birthYear = '??';
   if (this.date_of_birth) {
-    birthYear = this.date_of_birth.getYear().toString();
+    birthYear = this.date_of_birth.getFullYear().toString();
   }
   let deathYear = '??';
   if (this.date_of_death) {
-    deathYear = this.date_of_death.getYear().toString();
+    deathYear = this.date_of_death.getFullYear().toString();
   }
 
   const lifespanStr = `${birthYear}–${deathYear}`;
