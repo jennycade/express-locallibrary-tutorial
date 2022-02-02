@@ -73,20 +73,14 @@ exports.author_create_post = [
     .trim()
     .isLength({ min: 1})
     .escape()
-    .withMessage('First name required.')
-
-    .isAlphanumeric()
-    .withMessage(`First name can't have non-alphanueric characters`),
+    .withMessage('First name required.'),
   
   // family_name
   body('family_name')
     .trim()
     .isLength({ min: 1})
     .escape()
-    .withMessage('Family name required.')
-
-    .isAlphanumeric()
-    .withMessage(`Family name can't have non-alphanueric characters`),
+    .withMessage('Family name required.'),
   
   // date_of_birth
   body('date_of_birth', 'Invalid date of birth')
