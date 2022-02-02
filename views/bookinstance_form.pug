@@ -1,0 +1,88 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  form(method='POST' action='')
+    .form-group 
+      label(for='book') Book: 
+      select#book.form-control(
+        type='select'
+        name='book'
+        required=true
+      )
+        option(
+          value=''
+          disabled 
+          selected=(book === undefined)
+        ) Select book
+
+        -
+          book_list.sort(
+            (a, b) => {
+              let textA = a.title.toUpperCase();
+              let textB = b.title.toUpperCase();
+              if (textA < textB) {
+                return -1;
+              } else if (textA > textB) {
+                return 1;
+              } else {
+                return 0;
+              }
+            }
+          );
+        
+        for book in book_list
+          if bookinstance 
+            option(
+              value=book._id
+              selected=(bookinstance.book.toString() === book._id.toString())
+            ) #{book.title}
+          else
+            option(value=book._id) #{book.title}
+        
+    .form-group 
+      label(for='imprint') Imprint: 
+      input#imprint.form-control(
+        type='text'
+        placeholder='Publisher and date information'
+        name='imprint'
+        required 
+        value=(bookinstance === undefined ? '' : bookinstance.imprint)
+      )
+
+    .form-group
+      label(for='due_back') Date when book will be available: 
+      input#due_back.form-control(
+        type='date'
+        name='due_back'
+        value=(bookinstance === undefined ? '' : bookinstance.due_back)
+      )
+
+    .form-group 
+      label(for='status') Status: 
+      select#status.form-control(
+        type='select'
+        name='status'
+        required
+      )
+        option(
+          value=''
+          disabled 
+          selected=(bookinstance === undefined)
+        )
+        -
+          const status_options = ['Maintenance', 'Available', 'Loaned', 'Reserved'];
+        
+        for status_option in status_options
+          option(
+            value=status_option
+            selected=(bookinstance && (bookinstance.status === status_option))
+          ) #{status_option}
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+    ul 
+      for error in errors 
+        li!= error.msg
