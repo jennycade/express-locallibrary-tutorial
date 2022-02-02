@@ -119,9 +119,88 @@ exports.book_create_get = function(req, res, next) {
 };
 
 // Handle book create on POST.
-exports.book_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Book create POST');
-};
+exports.book_create_post = [
+
+  // convert the genre to an array
+  (req, res, next) => {
+    if (!(req.body.genre instanceof Array)) {
+      if (typeof req.body.genre === 'undefined') {
+        req.body.genre = [];
+      } else {
+        req.body.genre = new Array(req.body.genre);
+      }
+    }
+    next();
+  },
+
+  // validate and sanitize fiels
+  body('title', 'Title must not be empty.')
+    .trim().isLength({min: 1}).escape(),
+  body('author', 'Author must not be empty.')
+    .trim().isLength({min: 1}).escape(),
+  body('summary', 'Summary must not be empty.')
+    .trim().isLength({min: 1}).escape(),
+  body('isbn')
+    .trim().isLength({min: 1}).escape().withMessage('ISBN required')
+    .isISBN().withMessage('ISBN is invalid'),
+  body('genre.*').escape(),
+
+  // process request
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const book = new Book({
+      title: req.body.title,
+      author: req.body.author,
+      summary: req.body.summary,
+      isbn: req.body.isbn,
+      genre: req.body.genre,
+    });
+
+    if (!errors.isEmpty()) {
+      // get authors and genres for form (again)
+      async.parallel(
+        {
+          authors: (callback) => {
+            Author.find(callback);
+          },
+          genres: (callback) => {
+            Genre.find(callback);
+          },
+        },
+
+        (err, results) => {
+          if (err) { return next(err) }
+
+          // mark selected genres as checked
+          for (let i=0; i<results.genres.length; i++) {
+            if (book.genre.indexOf(results.genres[i]._id) > -1) {
+              results.genres[i].checked = 'true';
+            }
+          }
+
+          res.render(
+            'book_form',
+            {
+              title: 'Create Book',
+              authors: results.authors,
+              genres: results.genres,
+              book: book,
+              errors: errors.array(),
+            }
+          );
+          return;
+        }
+      )
+    } else {
+      // valid form, save book
+      book.save((err) => {
+        if (err) { return next(err) }
+        res.redirect(book.url);
+      });
+    }
+  }
+];
 
 // Display book delete form on GET.
 exports.book_delete_get = function(req, res) {
