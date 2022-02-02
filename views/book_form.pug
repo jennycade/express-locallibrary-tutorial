@@ -19,7 +19,6 @@ block content
       label(for='author') Author:
       select#author.form-control(
         type='select',
-        placeholder='Select author'
         name='author'
         required=true
       )
@@ -43,7 +42,11 @@ block content
           if book
             option(
               value=author._id.toString()
-              selected=(author._id.toString() === book.author._id.toString() ? 'selected' : false)
+              selected=(
+                (author._id.toString() === book.author._id.toString() 
+                || author._id.toString() === book.author)
+                ? 'selected' : false
+              )
             ) #{author.name}
           else 
             option(value=author._id.toString()) #{author.name}
