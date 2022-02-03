@@ -1,3 +1,4 @@
+const { DateTime } = require('luxon');
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
@@ -56,6 +57,19 @@ AuthorSchema
 .virtual('url')
 .get(function() {
   return `/catalog/author/${this._id}`;
+});
+
+// Virtual for ISO-formatted dates
+AuthorSchema
+.virtual('date_of_birth_ISO')
+.get(function() {
+  return DateTime.fromJSDate(this.date_of_birth).toISODate();
+});
+
+AuthorSchema
+.virtual('date_of_death_ISO')
+.get(function() {
+  return DateTime.fromJSDate(this.date_of_death).toISODate();
 });
 
 // export
