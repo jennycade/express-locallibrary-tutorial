@@ -368,7 +368,6 @@ exports.book_update_post = [
     });
 
     if (!errors.isEmpty()) {
-      console.log('Oh no, errors!');
       async.parallel(
         {
           authors: (callback) => {
@@ -389,7 +388,7 @@ exports.book_update_post = [
             }
           }
 
-          // render
+          // render form again
           res.render(
             'book_form',
             {
@@ -404,7 +403,6 @@ exports.book_update_post = [
         }
       );
     } else {
-      console.log('Got through to send the update');
       Book.findByIdAndUpdate(req.params.id, book, {}, (err, updated_book) => {
         if (err) { return next(err); }
 

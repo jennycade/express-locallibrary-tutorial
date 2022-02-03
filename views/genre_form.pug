@@ -4,7 +4,7 @@ block content
   h1 #{title}
 
   form(method='POST' action='')
-    di.form-group 
+    div.form-group 
       label(for='name') Genre: 
       input#name.form-control(type='text', placeholder='Fantasy, Poetry, etc.' name='name' value=(genre === undefined ? '' : genre.name) required='true')
     button.btn.btn-primary(type='submit') Submit
