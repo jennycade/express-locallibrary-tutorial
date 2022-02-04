@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const compression = require('compression');
+const helmet = require('helmet');
 
 // import routes
 var indexRouter = require('./routes/index');
@@ -12,6 +14,9 @@ let catalogRouter = require('./routes/catalog');
 
 // start express
 var app = express();
+
+// helmet
+app.use(helmet());
 
 // connect to mongoose
 var mongoose = require('mongoose');
@@ -31,6 +36,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // routing
